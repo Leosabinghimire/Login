@@ -12,9 +12,20 @@ const Login = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!username.trim() || !password.trim()) {
+      setValidationError("Username and password are required");
+      return;
+    }
+
+    if (password.length < 6) {
+      setValidationError("Password must be at least 6 characters long");
+      return;
+    }
 
     dispatch(loginStart());
 
@@ -57,10 +68,11 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {validationError && <p style={{ color: "red" }}>{validationError}</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <button type="submit">
             <span>{loading ? "Logging in..." : "Login"}</span>
           </button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
         </form>
         <img src={image2} alt="" className="image-2" />
       </div>
